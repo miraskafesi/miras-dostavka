@@ -1,0 +1,586 @@
+﻿<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мирас Ресторан & Кафе — Тағам жеткізу</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #121110;
+            color: #F5F5F0;
+            font-family: 'Montserrat', sans-serif;
+            padding-bottom: 95px;
+        }
+
+        header {
+            background: linear-gradient(180deg, #1a1816 0%, #121110 100%);
+            padding: 24px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+
+        .restaurant-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #D4AF37;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .restaurant-subtitle {
+            font-size: 11px;
+            color: #A8A39D;
+            letter-spacing: 1.5px;
+            margin-top: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-info {
+            font-size: 12px;
+            color: #D4AF37;
+            margin-top: 8px;
+            opacity: 0.85;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .category-nav {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 14px 16px;
+            background: #181614;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .category-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-btn {
+            padding: 10px 18px;
+            border-radius: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgba(255, 255, 255, 0.03);
+            color: #E0DDD7;
+            white-space: nowrap;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn.active {
+            background: linear-gradient(135deg, #D4AF37 0%, #AA7C11 100%);
+            color: #000;
+            border-color: #D4AF37;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .container {
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .food-grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        .food-card {
+            background: #1A1816;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(212, 175, 55, 0.12);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .food-info h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #FFFFFF;
+            letter-spacing: 0.3px;
+        }
+
+        .food-price {
+            font-size: 15px;
+            font-weight: 700;
+            color: #D4AF37;
+            margin-top: 6px;
+        }
+
+        .counter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #24211D;
+            border-radius: 25px;
+            padding: 4px 8px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .counter button {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: #1A1816;
+            color: #D4AF37;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .counter button:active {
+            transform: scale(0.9);
+            background: #D4AF37;
+            color: #000;
+        }
+
+        .counter span {
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 20px;
+            text-align: center;
+            color: #FFF;
+        }
+
+        .cart-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #181614;
+            padding: 14px 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.6);
+            z-index: 99;
+        }
+
+        .cart-btn {
+            background: linear-gradient(135deg, #D4AF37 0%, #AA7C11 100%);
+            color: #000;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 200;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .modal-content {
+            background: #1A1816;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 24px 24px 0 0;
+            padding: 24px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-top: 1px solid #D4AF37;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            color: #D4AF37;
+            font-size: 22px;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: #A8A39D;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #D4AF37;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #24211D;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            font-size: 15px;
+            color: #FFF;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #D4AF37;
+        }
+
+        .order-summary {
+            background: #24211D;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px 0;
+            font-size: 14px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: #E0DDD7;
+        }
+
+        .summary-divider {
+            border: none;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="restaurant-title">МИРАС</div>
+        <div class="restaurant-subtitle">Ресторан & Кафе</div>
+        <div class="header-info">
+            <span>📍 Бөгенбай батыр 150</span>
+            <span>•</span>
+            <span>🕙 10:00–00:00</span>
+        </div>
+    </header>
+
+    <div class="category-nav">
+        <button class="category-btn active" onclick="filterCategory('shashlik', this)">Кәуаптар</button>
+        <button class="category-btn" onclick="filterCategory('first', this)">1-ші тағамдар</button>
+        <button class="category-btn" onclick="filterCategory('second', this)">2-ші тағамдар</button>
+        <button class="category-btn" onclick="filterCategory('lagman', this)">Лағмандар</button>
+        <button class="category-btn" onclick="filterCategory('fish', this)">Балық</button>
+        <button class="category-btn" onclick="filterCategory('salad', this)">Салаттар</button>
+        <button class="category-btn" onclick="filterCategory('fastfood', this)">Фаст Фуд</button>
+        <button class="category-btn" onclick="filterCategory('pizza', this)">Пицца</button>
+        <button class="category-btn" onclick="filterCategory('drink', this)">Сусындар</button>
+    </div>
+
+    <div class="container" id="menu-container"></div>
+
+    <div class="cart-bar">
+        <button class="cart-btn" onclick="openModal()">
+            Себетке өту (<span id="cart-total-price">0</span> тг)
+        </button>
+    </div>
+
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Тапсырысты рәсімдеу</h2>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+
+            <div class="order-summary" id="order-details"></div>
+
+            <div class="input-group">
+                <label>Аты-жөніңіз</label>
+                <input type="text" id="cust-name" placeholder="Мысалы: Арман">
+            </div>
+            <div class="input-group">
+                <label>Телефон нөміріңіз</label>
+                <input type="tel" id="cust-phone" placeholder="+7 (775) 000-00-00">
+            </div>
+            <div class="input-group">
+                <label>Жеткізу мекенжайы</label>
+                <input type="text" id="cust-address" placeholder="Көше, үй, пәтер">
+            </div>
+
+            <button class="cart-btn" style="margin-top: 12px;" onclick="sendToWhatsApp()">
+                📲 WhatsApp арқылы тапсырыс беру
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const menu = [
+            // КӘУАП / ШАШЛЫК
+            { id: 1, name: "Қой еті шашлық", price: 1500, category: "shashlik" },
+            { id: 2, name: "Үйрек еті шашлық", price: 1000, category: "shashlik" },
+            { id: 3, name: "Тауық еті шашлық", price: 700, category: "shashlik" },
+            { id: 4, name: "Шампиньон шашлық", price: 1200, category: "shashlik" },
+            { id: 5, name: "Антрекот", price: 1800, category: "shashlik" },
+            { id: 6, name: "Семечки", price: 1800, category: "shashlik" },
+            { id: 7, name: "Тауық филесі", price: 700, category: "shashlik" },
+            { id: 8, name: "Люля кәуап", price: 1000, category: "shashlik" },
+            { id: 9, name: "Қанатша (Крылышки)", price: 1200, category: "shashlik" },
+            { id: 10, name: "Рулет", price: 1800, category: "shashlik" },
+            { id: 11, name: "Бауыр (Печень)", price: 1000, category: "shashlik" },
+            { id: 12, name: "Наполеон", price: 1800, category: "shashlik" },
+            { id: 13, name: "Үйрек еті (Акция)", price: 600, category: "shashlik" },
+            { id: 14, name: "Люля кәуап (Акция)", price: 390, category: "shashlik" },
+            { id: 15, name: "Тауық филесі (Акция)", price: 390, category: "shashlik" },
+
+            // БІРІНШІ ТАҒАМДАР
+            { id: 16, name: "Бешбармақ", price: 3500, category: "first" },
+            { id: 17, name: "Қойдың сорпасы", price: 1800, category: "first" },
+            { id: 18, name: "Қуырдақ", price: 2200, category: "first" },
+            { id: 19, name: "Үй пельмені", price: 1950, category: "first" },
+            { id: 20, name: "Тауық сорпасы кеспемен", price: 1850, category: "first" },
+            { id: 21, name: "Үй лағманы", price: 1850, category: "first" },
+            { id: 22, name: "Манпар", price: 1850, category: "first" },
+            { id: 23, name: "Солянка", price: 1850, category: "first" },
+            { id: 24, name: "Рамен", price: 1850, category: "first" },
+
+            // ЕКІНШІ ТАҒАМДАР
+            { id: 25, name: "Манты", price: 2000, category: "second" },
+            { id: 26, name: "Сірне", price: 2700, category: "second" },
+            { id: 27, name: "Котлет", price: 1700, category: "second" },
+            { id: 28, name: "Мясо по-тайский", price: 2200, category: "second" },
+            { id: 29, name: "Острое мясо с овощами", price: 2200, category: "second" },
+            { id: 30, name: "Фри с мясом", price: 2200, category: "second" },
+            { id: 31, name: "Мясо с грибами", price: 2200, category: "second" },
+            { id: 32, name: "Бризоль", price: 1700, category: "second" },
+            { id: 33, name: "Қазан кебаб", price: 2500, category: "second" },
+            { id: 34, name: "Дапанджи", price: 2500, category: "second" },
+
+            // ЛАҒМАНДАР
+            { id: 35, name: "Гуйру лағман", price: 1850, category: "lagman" },
+            { id: 36, name: "Суйру лағман", price: 1850, category: "lagman" },
+            { id: 37, name: "Дин дин лағман", price: 1850, category: "lagman" },
+            { id: 38, name: "Цомян", price: 1850, category: "lagman" },
+
+            // БАЛЫҚ ТАҒАМДАРЫ
+            { id: 39, name: "Сазан", price: 3500, category: "fish" },
+            { id: 40, name: "Карась", price: 2500, category: "fish" },
+            { id: 41, name: "Окунь (2 дана)", price: 3000, category: "fish" },
+            { id: 42, name: "Судак", price: 3500, category: "fish" },
+
+            // САЛАТТАР
+            { id: 43, name: "Пекин салаты", price: 2150, category: "salad" },
+            { id: 44, name: "Мирас салаты", price: 2200, category: "salad" },
+            { id: 45, name: "Жаңа көкөніс кесіндісі", price: 2000, category: "salad" },
+            { id: 46, name: "Достық салаты", price: 2150, category: "salad" },
+            { id: 47, name: "Тай салаты", price: 2000, category: "salad" },
+            { id: 48, name: "Қытырлақ баклажан", price: 2200, category: "salad" },
+            { id: 49, name: "Оливье салаты", price: 2000, category: "salad" },
+            { id: 50, name: "Цезарь салаты (тауық етімен)", price: 2700, category: "salad" },
+            { id: 51, name: "Грек салаты", price: 2000, category: "salad" },
+            { id: 52, name: "Гнездо салаты", price: 2000, category: "salad" },
+            { id: 53, name: "Малибу салаты", price: 2150, category: "salad" },
+            { id: 54, name: "Ачучук салаты", price: 2000, category: "salad" },
+            { id: 55, name: "Ананас салаты", price: 2150, category: "salad" },
+
+            // ФАСТ ФУД
+            { id: 56, name: "Крылышки KFS (8 шт)", price: 1800, category: "fastfood" },
+            { id: 57, name: "Крылышки KFS (16 шт)", price: 3600, category: "fastfood" },
+            { id: 58, name: "Крылышки KFS (24 шт)", price: 5400, category: "fastfood" },
+            { id: 59, name: "Крылышки KFS (32 шт)", price: 7200, category: "fastfood" },
+            { id: 60, name: "Наггетсы", price: 1300, category: "fastfood" },
+            { id: 61, name: "Картофель тілімдері (Дольки)", price: 1000, category: "fastfood" },
+            { id: 62, name: "Картофель фри", price: 800, category: "fastfood" },
+            { id: 63, name: "Донер Стандарт", price: 1300, category: "fastfood" },
+            { id: 64, name: "Донер Полтора", price: 1500, category: "fastfood" },
+            { id: 65, name: "Қуырылған Донер", price: 1700, category: "fastfood" },
+
+            // ПИЦЦА
+            { id: 66, name: "Пепперони пиццасы", price: 2200, category: "pizza" },
+            { id: 67, name: "4 Сезона пиццасы", price: 2300, category: "pizza" },
+            { id: 68, name: "Маргарита пиццасы", price: 2000, category: "pizza" },
+            { id: 69, name: "Болонезе пиццасы", price: 2500, category: "pizza" },
+            { id: 70, name: "Сырная пиццасы", price: 2300, category: "pizza" },
+
+            // СУСЫНДАР
+            { id: 71, name: "Кола (Coca-Cola)", price: 800, category: "drink" },
+            { id: 72, name: "Пепси (Pepsi)", price: 800, category: "drink" },
+            { id: 73, name: "Фанта (Fanta)", price: 800, category: "drink" },
+            { id: 74, name: "Компот", price: 800, category: "drink" },
+            { id: 75, name: "Макси шай", price: 800, category: "drink" },
+            { id: 76, name: "Айсти шай", price: 800, category: "drink" },
+            { id: 77, name: "Пиала шай", price: 800, category: "drink" },
+            { id: 78, name: "Лимонад", price: 1700, category: "drink" },
+            { id: 79, name: "Су (Вода)", price: 520, category: "drink" },
+            { id: 80, name: "Горилла (Gorilla Energy)", price: 800, category: "drink" },
+            { id: 81, name: "Мохито", price: 800, category: "drink" },
+            { id: 82, name: "Диззи (Dizzy)", price: 800, category: "drink" },
+            { id: 83, name: "Балалар шырыны (Детский сок)", price: 500, category: "drink" }
+        ];
+
+        const deliveryFee = 500;
+        let cart = {};
+        let currentCategory = 'shashlik'; // Әдепкі категория
+
+        function renderMenu(categoryFilter = 'shashlik') {
+            const container = document.getElementById('menu-container');
+            container.innerHTML = '';
+
+            const filteredMenu = menu.filter(item => item.category === categoryFilter);
+
+            filteredMenu.forEach(item => {
+                const count = cart[item.id] || 0;
+                const card = document.createElement('div');
+                card.className = 'food-card';
+                card.innerHTML = `
+                    <div class="food-info">
+                        <h3>${item.name}</h3>
+                        <div class="food-price">${item.price} тг</div>
+                    </div>
+                    <div class="counter">
+                        <button onclick="changeQty(${item.id}, -1)">-</button>
+                        <span>${count}</span>
+                        <button onclick="changeQty(${item.id}, 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function changeQty(id, change) {
+            if (!cart[id]) cart[id] = 0;
+            cart[id] += change;
+
+            if (cart[id] <= 0) delete cart[id];
+
+            updateCartTotal();
+            renderMenu(currentCategory);
+        }
+
+        function updateCartTotal() {
+            let total = 0;
+            for (let id in cart) {
+                const item = menu.find(m => m.id == id);
+                total += item.price * cart[id];
+            }
+            document.getElementById('cart-total-price').innerText = total;
+        }
+
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderMenu(cat);
+        }
+
+        function openModal() {
+            let itemsTotal = 0;
+            let detailsHtml = '<b style="color:#D4AF37;">Тапсырыс құрамы:</b><br><br>';
+            
+            let hasItems = false;
+            for (let id in cart) {
+                hasItems = true;
+                const item = menu.find(m => m.id == id);
+                const sum = item.price * cart[id];
+                itemsTotal += sum;
+                detailsHtml += `<div class="summary-row"><span>${item.name} x ${cart[id]}</span> <span>${sum} тг</span></div>`;
+            }
+
+            if (!hasItems) {
+                alert("Себет бос! Алдымен тағам таңдаңыз.");
+                return;
+            }
+
+            const grandTotal = itemsTotal + deliveryFee;
+
+            detailsHtml += `<hr class="summary-divider"><div class="summary-row"><span>Тағамдар сомасы:</span> <span>${itemsTotal} тг</span></div>`;
+            detailsHtml += `<div class="summary-row"><span>Жеткізу:</span> <span>${deliveryFee} тг</span></div>`;
+            detailsHtml += `<div class="summary-row" style="font-weight:bold; font-size:16px; color:#D4AF37;"><span>БАРЛЫҒЫ:</span> <span>${grandTotal} тг</span></div>`;
+
+            document.getElementById('order-details').innerHTML = detailsHtml;
+            document.getElementById('orderModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+
+        function sendToWhatsApp() {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+
+            if (!name || !phone || !address) {
+                alert("Өтініш, барлық өрістерді (Аты, Телефон, Мекенжай) толтырыңыз!");
+                return;
+            }
+
+            let text = `*ЖАҢА ТАПСЫРЫС («Мирас» рестораны)*\n\n`;
+            text += `👤 *Тапсырыс беруші:* ${name}\n`;
+            text += `📞 *Телефон:* ${phone}\n`;
+            text += `📍 *Мекенжай:* ${address}\n\n`;
+            text += `📋 *Тапсырыс тізімі:*\n`;
+
+            let itemsTotal = 0;
+            for (let id in cart) {
+                const item = menu.find(m => m.id == id);
+                const sum = item.price * cart[id];
+                itemsTotal += sum;
+                text += `• ${item.name} — ${cart[id]} шт. (${sum} тг)\n`;
+            }
+
+            const grandTotal = itemsTotal + deliveryFee;
+
+            text += `\n💵 *Тағамдар сомасы:* ${itemsTotal} тг`;
+            text += `\n🚚 *Жеткізу:* ${deliveryFee} тг`;
+            text += `\n💰 *БАРЛЫҒЫ:* ${grandTotal} тг`;
+
+            const phoneNum = "77754008098";
+            const encodedText = encodeURIComponent(text);
+            const waUrl = `https://api.whatsapp.com/send?phone=${phoneNum}&text=${encodedText}`;
+
+            window.location.href = waUrl;
+        }
+
+        // Бастапқы қосылу
+        renderMenu('shashlik');
+    </script>
+</body>
+</html>
